@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Admin.Lili</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧁</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff6ec;--card:#fffdf9;--ink:hsl(329, 70%, 69%);--mute:#8a5a6e;--pink:#e8657f;--soft:#f8b4b8;--line:#f0dccf;--ok:#3f8f5f;--bad:#b3384f;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:hwb(330 67% 4%);--card:#36202b;--ink:#fbe9ee;--mute:#cba3b2;--line:#503444;--soft:#7a3a4c;--ok:#74c996;--bad:#ff8aa0}}
+:root[data-theme="dark"]{--bg:#2a1620;--card:#36202b;--ink:#fbe9ee;--mute:#cba3b2;--line:#503444;--soft:#7a3a4c;--ok:#74c996;--bad:#ff8aa0}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'DM Sans',system-ui,sans-serif;line-height:1.5}
+.top{background:var(--soft);text-align:center;font-size:12px;letter-spacing:.08em;padding:10px;text-transform:uppercase}
+.wrap{max-width:1000px;margin:0 auto;padding:20px 16px 60px}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+h1{font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;font-size:34px;margin:0;line-height:1.1}
+h1 small{display:block;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--mute);letter-spacing:.1em;text-transform:uppercase;font-weight:400}
+h2{font-family:'Cormorant Garamond',Georgia,serif;font-size:24px;margin:0 0 12px}
+.tabs{display:flex;gap:8px;margin-bottom:18px}
+.tab{border:1px solid var(--pink);background:transparent;color:var(--pink);padding:10px 22px;border-radius:99px;font:inherit;cursor:pointer}
+.tab.on{background:var(--pink);color:#fff}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;margin-bottom:16px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:16px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px}
+.stat b{display:block;font-family:'Cormorant Garamond',Georgia,serif;font-size:36px;line-height:1.1;color:var(--pink)}
+.stat span{font-size:13px;color:var(--mute)}
+form,.row{display:flex;flex-wrap:wrap;gap:10px;align-items:end}
+label{display:flex;flex-direction:column;font-size:12px;color:var(--mute);gap:4px;flex:1;min-width:130px}
+input,select{font:inherit;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--bg);color:var(--ink);width:100%}
+button.b{font:inherit;border:0;background:var(--pink);color:#fff;padding:10px 18px;border-radius:99px;cursor:pointer}
+button.g{font:inherit;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:99px;cursor:pointer;font-size:13px}
+button.g.d{color:var(--bad)}
+.scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:520px}
+th{font-size:12px;text-align:left;color:var(--mute);font-weight:500;padding:8px;border-bottom:1px solid var(--line)}
+td{padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:middle}
+td.r,th.r{text-align:right}
+.tag{font-size:12px;padding:3px 10px;border-radius:99px;border:1px solid}
+.tag.on{color:var(--ok)}.tag.off{color:var(--mute)}
+.empty{color:var(--mute);text-align:center;padding:22px}
+.bar{height:8px;border-radius:9px;background:var(--pink);min-width:3px}
+.note{font-size:13px;color:var(--mute);margin:8px 0 0}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<div class="top">✧ Painel da Lili · feito à mão, para adoçar o que importa ✧</div>
+<div class="wrap">
+  <header>
+    <h1>Forninho da Lili<small>Administração</small></h1>
+    <span id="who" class="note"></span>
+  </header>
+
+  <div class="tabs">
+    <button class="tab on" data-t="p">Produtos</button>
+    <button class="tab" data-t="v">Vendas</button>
+  </div>
+
+  <section id="p">
+    <div class="card">
+      <h2 id="ftitle">Novo produto</h2>
+      <form id="pf">
+        <label style="flex:2">Nome<input id="n" required placeholder="Ex.: Brigadeiro gourmet"></label>
+        <label>Categoria<input id="c" placeholder="Ex.: Doces"></label>
+        <label style="max-width:140px">Preço (R$)<input id="pr" type="number" step="0.01" min="0" required></label>
+        <button class="b" type="submit" id="save">Adicionar</button>
+        <button class="g" type="button" id="cancel" hidden>Cancelar</button>
+      </form>
+    </div>
+    <div class="card scroll">
+      <table>
+        <thead><tr><th>Produto</th><th>Categoria</th><th class="r">Preço</th><th>Status</th><th class="r">Ações</th></tr></thead>
+        <tbody id="pb"></tbody>
+      </table>
+      <div id="pe" class="empty" hidden>Nenhum produto ainda. Adicione o primeiro acima 🧁</div>
+    </div>
+  </section>
+
+  <section id="v" hidden>
+    <div class="stats">
+      <div class="stat"><b id="s1">0</b><span>Vendas registradas</span></div>
+      <div class="stat"><b id="s2">0</b><span>Unidades vendidas</span></div>
+      <div class="stat"><b id="s3">R$ 0,00</b><span>Faturamento</span></div>
+    </div>
+    <div class="card">
+      <h2>Registrar venda</h2>
+      <form id="sf">
+        <label style="flex:2">Produto<select id="sp" required></select></label>
+        <label style="max-width:110px">Qtd.<input id="sq" type="number" min="1" value="1" required></label>
+        <button class="b" type="submit">Registrar</button>
+      </form>
+      <p class="note">Use quando fechar uma encomenda (ex.: pelo WhatsApp). O total é calculado com o preço atual do produto.</p>
+    </div>
+    <div class="card">
+      <h2>Mais vendidos</h2>
+      <div id="rank"></div>
+    </div>
+    <div class="card scroll">
+      <h2>Histórico</h2>
+      <table>
+        <thead><tr><th>Data</th><th>Produto</th><th class="r">Qtd.</th><th class="r">Total</th><th class="r"></th></tr></thead>
+        <tbody id="vb"></tbody>
+      </table>
+      <div id="ve" class="empty" hidden>Nenhuma venda registrada ainda.</div>
+    </div>
+  </section>
+</div>
+
+<script>
+(function(){
+  var $=function(i){return document.getElementById(i)};
+  var money=function(n){return (n||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'})};
+  var esc=function(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML};
+  var products=[],sales=[],editing=null,db=null,canWrite=true;
+  var uid=function(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6)};
+
+  // Abas
+  document.querySelectorAll('.tab').forEach(function(b){b.onclick=function(){
+    document.querySelectorAll('.tab').forEach(function(x){x.classList.toggle('on',x===b)});
+    $('p').hidden=b.dataset.t!=='p';$('v').hidden=b.dataset.t!=='v';
+  }});
+
+  function renderProducts(){
+    var rows=products.slice().sort(function(a,b){return (a.name||'').localeCompare(b.name||'')});
+    $('pe').hidden=rows.length>0;
+    $('pb').innerHTML=rows.map(function(p){
+      return '<tr><td>'+esc(p.name)+'</td><td>'+esc(p.category||'—')+'</td><td class="r">'+money(p.price)+'</td>'+
+      '<td><span class="tag '+(p.available?'on':'off')+'">'+(p.available?'Disponível':'Indisponível')+'</span></td>'+
+      '<td class="r"><button class="g" data-a="tg" data-id="'+p.id+'">'+(p.available?'Pausar':'Ativar')+'</button> '+
+      '<button class="g" data-a="ed" data-id="'+p.id+'">Editar</button> '+
+      '<button class="g d" data-a="rm" data-id="'+p.id+'">Excluir</button></td></tr>';
+    }).join('');
+    var sel=$('sp'),cur=sel.value;
+    sel.innerHTML=rows.filter(function(p){return p.available}).map(function(p){
+      return '<option value="'+p.id+'">'+esc(p.name)+' — '+money(p.price)+'</option>'}).join('')||'<option value="">Cadastre um produto disponível</option>';
+    if(cur)sel.value=cur;
+  }
+
+  function renderSales(){
+    var list=sales.slice().sort(function(a,b){return (b.at||0)-(a.at||0)});
+    var units=0,rev=0,by={};
+    list.forEach(function(s){units+=s.qty||0;rev+=s.total||0;var k=s.name||'?';by[k]=by[k]||{q:0,t:0};by[k].q+=s.qty||0;by[k].t+=s.total||0});
+    $('s1').textContent=list.length;$('s2').textContent=units;$('s3').textContent=money(rev);
+    var rk=Object.keys(by).sort(function(a,b){return by[b].q-by[a].q}).slice(0,6),max=rk.length?by[rk[0]].q:1;
+    $('rank').innerHTML=rk.length?rk.map(function(k){
+      return '<div style="margin:8px 0"><div style="display:flex;justify-content:space-between;font-size:14px"><span>'+esc(k)+'</span><span>'+by[k].q+' un. · '+money(by[k].t)+'</span></div><div class="bar" style="width:'+Math.max(3,by[k].q/max*100)+'%"></div></div>';
+    }).join(''):'<div class="empty">Ainda sem vendas.</div>';
+    $('ve').hidden=list.length>0;
+    $('vb').innerHTML=list.slice(0,100).map(function(s){
+      return '<tr><td>'+new Date(s.at).toLocaleString('pt-BR',{dateStyle:'short',timeStyle:'short'})+'</td><td>'+esc(s.name)+'</td><td class="r">'+s.qty+'</td><td class="r">'+money(s.total)+'</td><td class="r"><button class="g d" data-a="rs" data-id="'+s.id+'">Remover</button></td></tr>';
+    }).join('');
+  }
+
+  function resetForm(){editing=null;$('pf').reset();$('ftitle').textContent='Novo produto';$('save').textContent='Adicionar';$('cancel').hidden=true}
+  $('cancel').onclick=resetForm;
+
+  $('pf').onsubmit=function(e){
+    e.preventDefault();if(!db)return;
+    var id=editing||uid(),old=products.find(function(p){return p.id===id});
+    db.doc('products/'+id).set({name:$('n').value.trim(),category:$('c').value.trim(),price:parseFloat($('pr').value)||0,available:old?old.available:true})
+      .then(resetForm).catch(function(){alert('Não foi possível salvar. Verifique se você está logado como dono do painel.')});
+  };
+
+  $('sf').onsubmit=function(e){
+    e.preventDefault();if(!db)return;
+    var p=products.find(function(x){return x.id===$('sp').value});if(!p)return;
+    var q=Math.max(1,parseInt($('sq').value)||1);
+    db.doc('sales/'+uid()).set({productId:p.id,name:p.name,qty:q,total:Math.round(p.price*q*100)/100,at:Date.now()})
+      .then(function(){$('sq').value=1}).catch(function(){alert('Não foi possível registrar a venda.')});
+  };
+
+  document.addEventListener('click',function(e){
+    var b=e.target.closest('button[data-a]');if(!b||!db)return;
+    var id=b.dataset.id,a=b.dataset.a,p=products.find(function(x){return x.id===id});
+    if(a==='tg'&&p)db.doc('products/'+id).update({available:!p.available});
+    if(a==='ed'&&p){editing=id;$('n').value=p.name;$('c').value=p.category||'';$('pr').value=p.price;$('ftitle').textContent='Editar produto';$('save').textContent='Salvar';$('cancel').hidden=false;$('pf').scrollIntoView({behavior:'smooth'})}
+    if(a==='rm'&&p&&confirm('Excluir "'+p.name+'"? As vendas antigas são mantidas.'))db.doc('products/'+id).delete();
+    if(a==='rs'&&confirm('Remover esta venda do histórico?'))db.doc('sales/'+id).delete();
+  });
+
+  renderProducts();renderSales();
+  $('who').textContent='Carregando dados…';
+
+  Promise.resolve(window.claude&&claude.use?claude.use('db'):null).then(function(d){
+    if(!d){$('who').textContent='Faça login no Claude para usar o painel e salvar dados.';return}
+    db=d;$('who').textContent='';
+    var t=setTimeout(function(){$('who').textContent='Demorando para carregar…'},10000);
+    var map=function(s){return s.docs.map(function(x){var o=x.data()||{};o.id=x.id;return o})};
+    db.collection('products').onSnapshot(function(s){clearTimeout(t);$('who').textContent='';products=map(s);renderProducts()},function(){$('who').textContent='Erro ao carregar produtos.'});
+    db.collection('sales').onSnapshot(function(s){sales=map(s);renderSales()},function(){});
+  }).catch(function(){$('who').textContent='Dados indisponíveis no momento.'});
+})();
+</script>
+</body>
+</html>
